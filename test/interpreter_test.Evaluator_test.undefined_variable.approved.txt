@@ -1,0 +1,6 @@
+source:
+x
+
+output:
+42
+

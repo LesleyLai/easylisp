@@ -1,0 +1,8 @@
+source:
+(cdr (cons 1 2) 2)
+
+error:
+Type error: arity mismatch for cdr
+the expected number of arguments does not match the given number
+  expected: 1, given: 2
+

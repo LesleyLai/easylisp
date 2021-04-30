@@ -1,0 +1,6 @@
+source:
+(lambda (x y) (+ x y))
+
+===============
+
+(lambda (x y) (app (var +) (var x) (var y)))

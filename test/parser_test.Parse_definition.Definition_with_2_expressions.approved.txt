@@ -1,0 +1,6 @@
+source:
+(define x 2 2)
+
+===============
+
+Syntax error: expect )

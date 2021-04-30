@@ -1,0 +1,6 @@
+source:
+)
+
+===============
+
+Syntax error: unexpected token when parsing expression

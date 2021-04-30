@@ -1,0 +1,6 @@
+source:
+(if (> x y)
+
+===============
+
+Syntax error: unexpected token when parsing expression

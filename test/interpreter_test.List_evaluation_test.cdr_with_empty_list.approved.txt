@@ -1,0 +1,6 @@
+source:
+(cdr (list))
+
+error:
+Type error: (pair? ()) is false
+

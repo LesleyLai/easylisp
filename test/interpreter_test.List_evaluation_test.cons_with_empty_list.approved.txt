@@ -1,0 +1,6 @@
+source:
+(car (list))
+
+error:
+Type error: (pair? ()) is false
+

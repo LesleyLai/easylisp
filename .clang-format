@@ -1,0 +1,15 @@
+﻿---
+BasedOnStyle: LLVM
+AllowShortBlocksOnASingleLine: Always
+AllowShortIfStatementsOnASingleLine: Always
+AllowShortLoopsOnASingleLine: true
+AllowShortFunctionsOnASingleLine: All
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterClass: false
+  AfterFunction: true
+  SplitEmptyRecord: false
+ColumnLimit: 80
+DerivePointerAlignment: false
+PointerAlignment: Left
+...

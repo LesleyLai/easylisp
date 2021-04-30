@@ -1,0 +1,6 @@
+source:
+(if 1 10 20)
+
+error:
+Type error: 1 is not a boolean. The condition of an if expression must be a boolean.
+

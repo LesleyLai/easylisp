@@ -1,0 +1,8 @@
+source:
+(eq?)
+
+error:
+Type error: arity mismatch for eq?
+the expected number of arguments does not match the given number
+  expected: 2, given: 0
+

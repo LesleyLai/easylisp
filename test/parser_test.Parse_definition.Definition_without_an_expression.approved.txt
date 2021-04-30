@@ -1,0 +1,6 @@
+source:
+(define x)
+
+===============
+
+Syntax error: unexpected token when parsing expression

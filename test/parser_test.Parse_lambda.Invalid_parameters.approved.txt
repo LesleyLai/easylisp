@@ -1,0 +1,6 @@
+source:
+(lambda (42 11) (+ x 11))
+
+===============
+
+Syntax error: parameter needs to be a valid identifier

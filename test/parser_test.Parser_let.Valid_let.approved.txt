@@ -1,0 +1,6 @@
+source:
+(let ((x 10) (y 20)) (+ x y))
+
+===============
+
+(let ((x (const 10)) (y (const 20))) (app (var +) (var x) (var y)))

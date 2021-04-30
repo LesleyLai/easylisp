@@ -1,0 +1,8 @@
+source:
+(+)
+
+error:
+Type error: arity mismatch for +
+the expected number of arguments does not match the given number
+  expected: at least 1, given: 0
+

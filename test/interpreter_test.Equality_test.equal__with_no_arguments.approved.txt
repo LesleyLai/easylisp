@@ -1,0 +1,8 @@
+source:
+(equal?)
+
+error:
+Type error: arity mismatch for equal?
+the expected number of arguments does not match the given number
+  expected: 2, given: 0
+

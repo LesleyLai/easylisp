@@ -1,0 +1,8 @@
+source:
+(cons 1 2 3)
+
+error:
+Type error: arity mismatch for cons
+the expected number of arguments does not match the given number
+  expected: 2, given: 3
+
