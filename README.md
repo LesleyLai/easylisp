@@ -6,7 +6,7 @@ is pretty hacky, but it can probably provide some educational value.
 ## Build and Run
 
 A recent version of [Visual Studio](https://www.visualstudio.com/), [GCC](https://gcc.gnu.org/),
-and [Clang](https://clang.llvm.org/) should be found on your system, they need to support at least C++20.
+and [Clang](https://clang.llvm.org/) should be found on your system, they need to support C++20.
 
 You also need to have [CMake](https://cmake.org/) and [Conan](https://conan.io/) package manager installed. You can
 install them by
