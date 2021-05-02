@@ -52,10 +52,7 @@ struct ObjectApplier : ObjectVisitor {
     throw std::runtime_error{"Type error: cannot apply to cons cells"};
   }
 
-  void visit(const Cons&) override
-  {
-    apply_to_cons();
-  }
+  void visit(const Cons&) override { apply_to_cons(); }
 };
 
 [[nodiscard]] auto apply(const Value& func, Values args) -> Value
@@ -67,10 +64,10 @@ struct ObjectApplier : ObjectVisitor {
           ObjectApplier visitor{args};
           f->accept(visitor);
           return visitor.result;
+        } else {
+          throw std::runtime_error{
+              fmt::format("Type error: cannot apply to {}!", to_string(func))};
         }
-
-        throw std::runtime_error{
-            fmt::format("Type error: cannot apply to {}!", to_string(func))};
       },
       func);
 }
@@ -81,15 +78,9 @@ struct Evaluator : ExprVisitor {
 
   explicit Evaluator(const EnvPtr& env_) : env{env_} {}
 
-  void visit(const NumberExpr& number) override
-  {
-    result = number.value;
-  }
+  void visit(const NumberExpr& number) override { result = number.value; }
 
-  void visit(const ApplyExpr& expr) override
-  {
-    result = apply_expr(expr, env);
-  }
+  void visit(const ApplyExpr& expr) override { result = apply_expr(expr, env); }
 
   void visit(const VariableExpr& expr) override
   {
@@ -120,10 +111,7 @@ struct Evaluator : ExprVisitor {
     result = eval(*expr.body, body_env);
   }
 
-  void visit(const BooleanExpr& expr) override
-  {
-    result = expr.value;
-  }
+  void visit(const BooleanExpr& expr) override { result = expr.value; }
 
   void visit(const IfExpr& expr) override
   {

@@ -80,9 +80,10 @@ auto to_vector(const Value& list) -> std::vector<Value>
 auto to_lisp_list(const Values& args) -> Value
 {
   Value list = nullptr;
-  for (const auto& arg : std::views::reverse(args)) {
-    list = std::make_shared<Cons>(arg, list, true);
+  for (auto begin = args.rbegin(), end = args.rend(); begin != end; ++begin) {
+    list = std::make_shared<Cons>(*begin, list, true);
   }
+
   return list;
 }
 
