@@ -28,7 +28,9 @@ make
 ## Usage
 
 After building the project, there should be an `bin/easylisp` executable under the `build` (where you invoked CMake)
-folder, and you can run it as a REPL:
+folder.
+
+You can run the interpreter as a REPL:
 
 ```sh
 $ easylisp
@@ -39,6 +41,12 @@ $ easylisp
 (1 4 9 16 25)
 >> (cons 1 (list 2 3 4))
 (1 2 3 4)
+```
+
+Or you can use it to interpret a file:
+
+```sh
+$ easylisp file.easylisp
 ```
 
 ## Language
@@ -275,6 +283,11 @@ We can achieve recursion by using definition. For example:
       (foldr cons (list 42) (range 0 5))
       ;; (0 1 2 3 4 42)
       ```
+
+#### Printing
+
+- `(print v)`
+    - Prints the value `v` and an endline
 
 ## License
 

@@ -306,6 +306,14 @@ auto builtin_foldr() -> Value
   });
 }
 
+auto builtin_print() -> Value
+{
+  return std::make_shared<BuiltinProc>("print", [](Values args) -> Value {
+    check_args_count("print", args.size(), 1);
+    fmt::print("{}\n", to_string(args[0]));
+    return nullptr;
+  });
+}
 } // anonymous namespace
 
 Environment::Environment(Environment::create_global_t)
@@ -346,4 +354,6 @@ Environment::Environment(Environment::create_global_t)
   bindings_.emplace("foldr", builtin_foldr());
 
   bindings_.emplace("procedural?", builtin_pred("procedural?", is_procedural));
+
+  bindings_.emplace("print", builtin_print());
 }
