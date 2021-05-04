@@ -5,7 +5,22 @@
 #include "interpreter.hpp"
 #include "parser.hpp"
 
-auto main() -> int
+namespace {
+
+void interpret_toplevel(const Toplevel& toplevel)
+{
+  std::visit( //
+      overloaded{
+          [](const ExprPtr& expr) {
+            const auto val = eval(*expr, Environment::global());
+            fmt::print("{}\n", to_string(val));
+          },
+          [](const Definition& definition) { add_definition(definition); },
+      },
+      toplevel);
+}
+
+void repl()
 {
   std::string line;
   while (true) {
@@ -14,9 +29,13 @@ auto main() -> int
     if (line.empty()) continue;
     if (line == "(exit)") { std::exit(0); }
     try {
-      interpret(parse_toplevel(line));
+      for (const auto& toplevel : parse(line)) { interpret_toplevel(toplevel); }
     } catch (const std::exception& e) {
       fmt::print("{}\n", e.what());
     }
   }
 }
+
+} // anonymous namespace
+
+auto main() -> int { repl(); }

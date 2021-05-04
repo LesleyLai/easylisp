@@ -3,7 +3,6 @@ Checks: '
 bugprone-*,
 cert-*,
 clang-analyzer-*,
-concurrency-*,
 cppcoreguidelines-init-variables,
 cppcoreguidelines-interfaces-global-init,
 cppcoreguidelines-narrowing-conversions,

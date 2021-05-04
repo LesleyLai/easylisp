@@ -7,7 +7,7 @@
 namespace {
 [[nodiscard]] auto is_space(char c) -> bool
 {
-  return c == ' ' || c == '\r' || c == '\n';
+  return c == ' ' || c == '\r' || c == '\n' || c == '\t';
 }
 
 [[nodiscard]] auto not_valid_identifier_char(char c) -> bool
@@ -93,18 +93,9 @@ void Scanner::consume_whitespaces()
 {
   while (is_space(peek())) { ++begin_; }
 }
-[[nodiscard]] auto Scanner::is_at_end() -> bool
-{
-  return begin_ == end_;
-}
-[[nodiscard]] auto Scanner::peek() -> char
-{
-  return peek_forward(0);
-}
-[[nodiscard]] auto Scanner::peek_next() -> char
-{
-  return peek_forward(1);
-}
+[[nodiscard]] auto Scanner::is_at_end() -> bool { return begin_ == end_; }
+[[nodiscard]] auto Scanner::peek() -> char { return peek_forward(0); }
+[[nodiscard]] auto Scanner::peek_next() -> char { return peek_forward(1); }
 [[nodiscard]] auto Scanner::peek_forward(int n) -> char
 {
   return (end_ - begin_ > n) ? begin_[n] : '\0';

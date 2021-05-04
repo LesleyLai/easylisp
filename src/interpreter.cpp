@@ -2,7 +2,6 @@
 #include "environment.hpp"
 #include "value.hpp"
 
-#include <fmt/core.h>
 #include <stdexcept>
 
 auto eval_args(const std::vector<ExprPtr>& arg_exprs, const EnvPtr& env)
@@ -84,7 +83,7 @@ struct Evaluator : ExprVisitor {
 
   void visit(const VariableExpr& expr) override
   {
-    if (auto* val = env->find(expr.id); val) {
+    if (const auto* val = env->find(expr.id); val) {
       result = *val;
       return;
     }
@@ -136,21 +135,8 @@ auto eval(const Expr& expr, const EnvPtr& env) -> Value
   return evaluator.result;
 }
 
-struct Interpreter {
-  void operator()(const ExprPtr& expr)
-  {
-    const auto val = eval(*expr, Environment::global());
-    fmt::print("{}\n", to_string(val));
-  }
-
-  void operator()(const Definition& definition)
-  {
-    Environment::global()->add(definition.var,
-                               eval(*definition.expr, Environment::global()));
-  }
-};
-
-void interpret(const Toplevel& toplevel)
+void add_definition(const Definition& definition)
 {
-  std::visit(Interpreter{}, toplevel);
+  Environment::global()->add(definition.var,
+                             eval(*definition.expr, Environment::global()));
 }

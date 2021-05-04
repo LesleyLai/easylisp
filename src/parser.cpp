@@ -12,6 +12,8 @@ class Parser {
 public:
   explicit Parser(std::string_view source) : itr_{source} {}
 
+  auto is_at_end() -> bool { return itr_->type == TokenType::eof; }
+
   [[nodiscard]] auto parse_toplevel() -> Toplevel
   {
     if (match(TokenType::left_paren)) {
@@ -26,18 +28,10 @@ public:
       }
     }
 
-    ExprPtr expr = parse_expr();
-    if (is_at_end()) { return expr; }
-
-    throw std::runtime_error{"Syntax error: File not ended"};
+    return parse_expr();
   }
 
 private:
-  auto is_at_end() -> bool
-  {
-    return itr_->type == TokenType::eof;
-  }
-
   auto match(TokenType type) -> bool
   {
     if (is_at_end()) { return false; }
@@ -184,9 +178,10 @@ private:
 
 } // anonymous namespace
 
-[[nodiscard]] auto parse_toplevel(std::string_view source) -> Toplevel
+[[nodiscard]] auto parse(std::string_view source) -> Program
 {
   Parser parser{source};
-
-  return parser.parse_toplevel();
+  Program program;
+  while (!parser.is_at_end()) { program.push_back(parser.parse_toplevel()); }
+  return program;
 }

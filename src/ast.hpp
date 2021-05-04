@@ -71,12 +71,10 @@ struct Definition {
  * @brief A Toplevel is either an expression or a definition
  */
 using Toplevel = std::variant<ExprPtr, Definition>;
+using Program = std::vector<Toplevel>;
 
 #define EXPR_ACCEPT                                                            \
-  void accept(ExprVisitor& visitor) const override                             \
-  {                                                                            \
-    visitor.visit(*this);                                                      \
-  }
+  void accept(ExprVisitor& visitor) const override { visitor.visit(*this); }
 
 /**
  * @brief A constant expression that contains a number
@@ -120,8 +118,7 @@ struct ApplyExpr : Expr {
 
   explicit ApplyExpr(ExprPtr func_, std::vector<ExprPtr> args_)
       : func{MOV(func_)}, arguments(MOV(args_))
-  {
-  }
+  {}
 
   EXPR_ACCEPT
 };
@@ -135,8 +132,7 @@ struct LambdaExpr : Expr {
 
   explicit LambdaExpr(std::vector<std::string> parameters_, ExprPtr body_)
       : parameters{(MOV(parameters_))}, body(MOV(body_))
-  {
-  }
+  {}
 
   EXPR_ACCEPT
 };
@@ -158,8 +154,7 @@ struct LetExpr : Expr {
 
   explicit LetExpr(std::vector<Binding> bindings_, ExprPtr body_)
       : bindings{(MOV(bindings_))}, body(MOV(body_))
-  {
-  }
+  {}
 
   EXPR_ACCEPT
 };
@@ -176,18 +171,11 @@ struct IfExpr : Expr {
       : cond_expr{MOV(cond_expr_)}, //
         if_expr{MOV(if_expr_)},     //
         else_expr{MOV(else_expr_)}
-  {
-  }
+  {}
 
   EXPR_ACCEPT
 };
 
 #undef EXPR_ACCEPT
-
-/// @brief Converts a Toplevel to string
-[[nodiscard]] auto to_string(const Toplevel& toplevel) -> std::string;
-
-/// @brief Converts an expression to string
-[[nodiscard]] auto to_string(const Expr& expr) -> std::string;
 
 #endif // EASYLISP_AST_HPP
