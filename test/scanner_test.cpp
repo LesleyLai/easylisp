@@ -6,17 +6,11 @@
 
 [[nodiscard]] static auto operator==(Token lhs, Token rhs) -> bool
 {
-  if (lhs.type != rhs.type) { return false; }
-  switch (lhs.type) {
-  case TokenType::number:
+  if (lhs.type != rhs.type || lhs.lexeme != rhs.lexeme) { return false; }
+  if (lhs.type == TokenType::number) {
     return lhs.data.number == rhs.data.number;
-
-  case TokenType::identifier:
-    return lhs.data.lexeme == rhs.data.lexeme;
-
-  default:
-    return true;
   }
+  return true;
 }
 
 TEST_CASE("Scanner empty string test")
@@ -28,32 +22,18 @@ TEST_CASE("Scanner empty string test")
 TEST_CASE("Scanner Test")
 {
   auto itr = Scanner{"(+ 42 0.5) ;; comments"};
-  Token first = *itr;
-  REQUIRE(first.type == TokenType::left_paren);
+  Token expected[] = {
+      {.type = TokenType::left_paren, .lexeme = "("},
+      {.type = TokenType::identifier, .lexeme = "+"},
+      {.type = TokenType::number, .lexeme = "42", .data = {.number = 42}},
+      {.type = TokenType::number, .lexeme = "0.5", .data = {.number = 0.5}},
+      {.type = TokenType::right_paren, .lexeme = ")"},
+  };
 
-  REQUIRE(first == first);
-
-  Token second = *(++itr);
-  REQUIRE(second.type == TokenType::identifier);
-  REQUIRE(second.data.lexeme == "+");
-
-  REQUIRE(second == second);
-  REQUIRE(second != first);
-
-  Token third = *(++itr);
-  REQUIRE(third.type == TokenType::number);
-  REQUIRE(third.data.number == 42);
-
-  REQUIRE(third == third);
-  REQUIRE(second != third);
-
-  Token fourth = *(++itr);
-  REQUIRE(fourth.type == TokenType::number);
-  REQUIRE(fourth.data.number == 0.5);
-
-  Token fifth = *(++itr);
-  REQUIRE(fifth.type == TokenType::right_paren);
-
-  ++itr;
-  REQUIRE(itr->type == TokenType::eof);
+  std::vector<Token> results;
+  while (itr->type != TokenType::eof) {
+    results.push_back(*itr);
+    ++itr;
+  }
+  REQUIRE(std::ranges::equal(results, expected));
 }

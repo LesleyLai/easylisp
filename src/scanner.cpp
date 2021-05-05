@@ -27,11 +27,13 @@ void Scanner::advance()
 
   switch (peek()) {
   case '(':
-    current_token_ = Token{TokenType::left_paren};
+    current_token_ =
+        Token{.type = TokenType::left_paren, .lexeme = {begin_, 1}};
     ++begin_;
     return;
   case ')':
-    current_token_ = Token{TokenType::right_paren};
+    current_token_ =
+        Token{.type = TokenType::right_paren, .lexeme = {begin_, 1}};
     ++begin_;
     return;
   }
@@ -39,7 +41,9 @@ void Scanner::advance()
   Number number = 0;
   if (auto [p, ec] = fast_float::from_chars(begin_, end_, number);
       ec == std::errc()) {
-    current_token_ = Token{.type = TokenType::number, .data{.number = number}};
+    current_token_ = Token{.type = TokenType::number,
+                           .lexeme = {begin_, p},
+                           .data{.number = number}};
     begin_ = p;
     return;
   }
@@ -83,9 +87,8 @@ auto Scanner::check_keyword(unsigned int start_offset, std::string_view rest,
 void Scanner::find_identifier()
 {
   const char* ident_end = std::find_if(begin_, end_, not_valid_identifier_char);
-  current_token_ =
-      Token{.type = identifier_type(),
-            .data = {.lexeme = std::string_view{begin_, ident_end}}};
+  current_token_ = Token{.type = identifier_type(),
+                         .lexeme = std::string_view{begin_, ident_end}};
   begin_ = ident_end;
 }
 

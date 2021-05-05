@@ -24,9 +24,9 @@ using Number = double;
  */
 struct Token {
   TokenType type = TokenType::eof;
+  std::string_view lexeme;
   union Data {
     Number number = 0;
-    std::string_view lexeme;
   } data = {};
 };
 

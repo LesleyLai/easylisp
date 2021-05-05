@@ -21,7 +21,7 @@ public:
       ++look_ahead_itr;
 
       if (match_itr(TokenType::identifier, look_ahead_itr) &&
-          look_ahead_itr->data.lexeme == "define") {
+          look_ahead_itr->lexeme == "define") {
         itr_ = look_ahead_itr;
         ++itr_;
         return parse_definition();
@@ -60,8 +60,7 @@ private:
       return expr;
     }
     case TokenType::identifier: {
-      auto expr =
-          std::make_shared<VariableExpr>(std::string{itr_->data.lexeme});
+      auto expr = std::make_shared<VariableExpr>(std::string{itr_->lexeme});
       ++itr_;
       return expr;
     }
@@ -122,7 +121,7 @@ private:
 
     while (!is_at_end() && itr_->type != TokenType::right_paren) {
       if (match(TokenType::identifier)) {
-        parameters.emplace_back(itr_->data.lexeme);
+        parameters.emplace_back(itr_->lexeme);
         ++itr_;
       } else {
         throw std::runtime_error(
@@ -157,7 +156,7 @@ private:
     if (itr_->type != TokenType::identifier) {
       throw std::runtime_error("Syntax error: expect variable name");
     }
-    std::string variable{itr_->data.lexeme};
+    std::string variable{itr_->lexeme};
     ++itr_;
     ExprPtr expr = parse_expr();
     consume_right_param();
