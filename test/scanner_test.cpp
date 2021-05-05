@@ -27,7 +27,7 @@ TEST_CASE("Scanner empty string test")
 
 TEST_CASE("Scanner Test")
 {
-  auto itr = Scanner{"(+ 42 0.5)"};
+  auto itr = Scanner{"(+ 42 0.5) ;; comments"};
   Token first = *itr;
   REQUIRE(first.type == TokenType::left_paren);
 

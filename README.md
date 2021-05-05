@@ -49,6 +49,9 @@ Or you can use it to interpret a file:
 $ easylisp file.easylisp
 ```
 
+You can find some examples in the `scripts` folder. Those scripts will be automatically copied into the same folder of
+executable after build.
+
 ## Language
 
 ### If/Else

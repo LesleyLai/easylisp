@@ -91,7 +91,19 @@ void Scanner::find_identifier()
 
 void Scanner::consume_whitespaces()
 {
-  while (is_space(peek())) { ++begin_; }
+  while (true) {
+    const char c = peek();
+
+    if (is_space(c)) {
+      ++begin_;
+      continue;
+    }
+    if (c == ';') {
+      while (peek() != '\n' && !is_at_end()) { ++begin_; }
+      continue;
+    }
+    break;
+  }
 }
 [[nodiscard]] auto Scanner::is_at_end() -> bool { return begin_ == end_; }
 [[nodiscard]] auto Scanner::peek() -> char { return peek_forward(0); }

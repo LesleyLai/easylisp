@@ -1,0 +1,83 @@
+;; Creates a list of n elements by applying proc to the integers in range [0, n)
+(define build-list (lambda (n proc)
+  (map proc (range 0 n))))
+
+;; Gets the length of a list
+(define length (lambda (lst) (foldl (lambda (x acc) (+ acc 1)) 0 lst)))
+
+;; Gets list element by index
+;; Example:
+;; (list-at (range 0 10) 6) ;; 6
+(define list-at (lambda (lst pos)
+  (if (eq? pos 0) (car lst) (list-at (cdr lst) (- pos 1)))))
+
+;; Appends two lists
+(define append (lambda (lhs rhs) (foldr cons rhs lhs)))
+
+;; Reverses a list
+(define reverse (lambda (lst) (foldl cons null lst)))
+
+;; Locates the first element of lst that is equal? to v. 
+;; If such an element exists, the tail of lst starting with that element is returned.
+;; Otherwise, the result is null.
+;; example:
+;; (member 5 (range 0 4)) ; ()
+;; (member 1 (range 0 4)) ; (1 2 3)
+(define member (lambda (v lst)
+  (if (null? lst) null (if (equal? v (car lst)) lst (member v (cdr lst))))
+  ))
+
+;; Same as member, but use eq?
+(define memq (lambda (v lst)
+  (if (eq? v (car lst)) lst (memq v (cdr lst)))))
+
+;; Same as member, but use a predicate function
+;; example:
+;; (memf (lambda (x) (> x 1)) (range 0 4)) ; (2 3)
+(define memf (lambda (proc lst)
+  (if (proc (car lst)) lst (memf proc (cdr lst)))))
+
+;; Takes first n elements of lst
+(define take (lambda (lst n)
+  (if (eq? n 0) null (cons (car lst) (take (cdr lst) (- n 1))))))
+
+;; Drops first n elements of lst
+(define drop (lambda (lst n)
+  (if (eq? n 0) lst (drop (cdr lst) (- n 1)))
+))
+
+;; Same as (cons (take lst n) (drop lst n))
+(define split-at (lambda (lst n)
+  (if 
+    (eq? n 0) 
+    (cons null lst)
+    (let ((res (split-at (cdr lst) (- n 1))))
+      (cons (cons (car lst) (car res)) (cdr res))
+    ))))
+
+;; Flattens an arbituary S-expression into a list
+;; example:
+;; (flatten (list (list 1) 2 (cons (list 3 (list 4)) 5) null))) ; (1 2 3 4 5)
+(define flatten (lambda (v)
+  (if
+    (pair? v)
+    (append (flatten (car v)) (flatten (cdr v)))
+    (if (null? v) null (list v)))))
+
+(define append-map (lambda (proc lst)
+  (foldl (lambda (v acc) (append acc (proc v))) null lst)))
+
+(define cartesian-product (lambda (lhs rhs)
+  (append-map (lambda (e1)
+    (map (lambda (e2) (cons e1 e2)) rhs)
+  ) lhs)))
+
+;; Counts the number of elements of lst that satisfy pred
+(define count (lambda (pred lst)
+  (foldl (lambda (v acc) (if (pred v) (+ 1 acc) acc)) 0 lst)))
+
+
+
+
+
+
