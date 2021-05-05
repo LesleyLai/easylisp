@@ -9,7 +9,7 @@
 
 namespace {
 
-[[nodiscard]] auto test_parse_toplevel(std::string_view src) -> std::string
+[[nodiscard]] auto test_parse_program(std::string_view src) -> std::string
 {
   std::string output = fmt::format("source:\n{}\n\n===============\n\n", src);
   try {
@@ -20,59 +20,72 @@ namespace {
   }
 }
 
-[[nodiscard]] auto verify_toplevel(std::string_view src)
+[[nodiscard]] auto verify_parse_program(std::string_view src)
 {
-  ApprovalTests::Approvals::verify(test_parse_toplevel(src));
+  ApprovalTests::Approvals::verify(test_parse_program(src));
 }
 
 } // anonymous namespace
 
+TEST_CASE("Parse empty lines")
+{
+  verify_parse_program("\n"
+                       "\n"
+                       "\n");
+}
+
 TEST_CASE("Parse bad syntax")
 {
-  SECTION("Single right paren") { verify_toplevel(")"); }
+  SECTION("Single right paren") { verify_parse_program(")"); }
 }
 
 TEST_CASE("Parse plus")
 {
-  SECTION("Valid plus") { verify_toplevel("(+ 1 3 4)"); }
+  SECTION("Valid plus") { verify_parse_program("(+ 1 3 4)"); }
 
-  SECTION("Missing right paren") { verify_toplevel("(+ 1 3 4"); }
+  SECTION("Missing right paren") { verify_parse_program("(+ 1 3 4"); }
 }
 
 TEST_CASE("Parse lambda")
 {
-  SECTION("Valid lambda") { verify_toplevel("(lambda (x y) (+ x y))"); }
+  SECTION("Valid lambda") { verify_parse_program("(lambda (x y) (+ x y))"); }
 
   SECTION("Invalid parameters")
   {
-    verify_toplevel("(lambda (42 11) (+ x 11))");
+    verify_parse_program("(lambda (42 11) (+ x 11))");
   }
 }
 
 TEST_CASE("Parser let")
 {
-  SECTION("Valid let") { verify_toplevel("(let ((x 10) (y 20)) (+ x y))"); }
+  SECTION("Valid let")
+  {
+    verify_parse_program("(let ((x 10) (y 20)) (+ x y))");
+  }
 }
 
 TEST_CASE("Parse if expression")
 {
-  SECTION("Valid if expression") { verify_toplevel("(if (> x y) x y)"); }
+  SECTION("Valid if expression") { verify_parse_program("(if (> x y) x y)"); }
 
-  SECTION("Missing right paren") { verify_toplevel("(if (> x y)"); }
+  SECTION("Missing right paren") { verify_parse_program("(if (> x y)"); }
 
-  SECTION("Missing else") { verify_toplevel("(if (> x y) 10"); }
+  SECTION("Missing else") { verify_parse_program("(if (> x y) 10"); }
 
-  SECTION("third branch") { verify_toplevel("(if (> x y) 10 20 30"); }
+  SECTION("third branch") { verify_parse_program("(if (> x y) 10 20 30"); }
 }
 
 TEST_CASE("Parse definition")
 {
-  SECTION("Valid definition") { verify_toplevel("(define x 42)"); }
+  SECTION("Valid definition") { verify_parse_program("(define x 42)"); }
 
-  SECTION("Definition without an expression") { verify_toplevel("(define x)"); }
+  SECTION("Definition without an expression")
+  {
+    verify_parse_program("(define x)");
+  }
 
   SECTION("Definition with 2 expressions")
   {
-    verify_toplevel("(define x 2 2)");
+    verify_parse_program("(define x 2 2)");
   }
 }

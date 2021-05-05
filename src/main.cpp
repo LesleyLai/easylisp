@@ -44,7 +44,11 @@ void repl()
   while (true) {
     fmt::print(">> ");
     std::getline(std::cin, line);
-    if (line.empty()) continue;
+    if (std::cin.fail() || std::cin.eof()) {
+      std::cin.clear();
+      break;
+    }
+
     if (line == "(exit)") { std::exit(0); }
     try {
       for (const auto& toplevel : parse(line)) {
@@ -80,7 +84,7 @@ void run_file(const char* filename)
 } // anonymous namespace
 
 auto main(int argc, const char* argv[]) -> int
-{
+try {
   if (argc == 1) {
     repl();
   } else if (argc == 2) {
@@ -89,4 +93,6 @@ auto main(int argc, const char* argv[]) -> int
     fmt::print(stderr, "Usage: easylisp [filename]\n");
     std::exit(2);
   }
+} catch (const std::exception& e) {
+  fmt::print("Uncaught exception:\n{}\n", e.what());
 }

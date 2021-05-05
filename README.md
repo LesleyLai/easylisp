@@ -128,7 +128,7 @@ We can achieve recursion by using definition. For example:
 (fact 10)  ; 3628800
 ```
 
-### List
+### List/Pair
 
 ```scheme
 (list 1 2 3) ;; (1 2 3)

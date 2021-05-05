@@ -18,12 +18,12 @@ namespace {
 
 void Scanner::advance()
 {
+  consume_whitespaces();
+
   if (is_at_end()) {
     current_token_ = Token{TokenType::eof};
     return;
   }
-
-  consume_whitespaces();
 
   switch (peek()) {
   case '(':
