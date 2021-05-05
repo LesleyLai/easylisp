@@ -3,4 +3,4 @@ source:
 
 ===============
 
-Syntax error: unexpected token when parsing expression
+Syntax error: unexpected end of file when parsing expression

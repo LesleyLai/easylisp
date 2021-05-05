@@ -4,6 +4,8 @@
 #include <algorithm>
 #include <stdexcept>
 
+#include <fmt/core.h>
+
 namespace {
 
 class Parser {
@@ -20,8 +22,7 @@ public:
       auto look_ahead_itr = itr_;
       ++look_ahead_itr;
 
-      if (match_itr(TokenType::identifier, look_ahead_itr) &&
-          look_ahead_itr->lexeme == "define") {
+      if (match_itr(TokenType::keyword_define, look_ahead_itr)) {
         itr_ = look_ahead_itr;
         ++itr_;
         return parse_definition();
@@ -68,9 +69,13 @@ private:
       ++itr_;
       return parse_parenthesis();
     }
-    default:
+    case TokenType::eof:
       throw std::runtime_error{
-          "Syntax error: unexpected token when parsing expression"};
+          "Syntax error: unexpected end of file when parsing expression"};
+    default:
+      throw std::runtime_error{fmt::format(
+          "Syntax error: unexpected token {} when parsing expression",
+          itr_->lexeme)};
     }
   }
 

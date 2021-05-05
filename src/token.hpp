@@ -11,6 +11,7 @@ enum class TokenType {
   right_paren,
   number,
   identifier,
+  keyword_define,
   keyword_if,
   keyword_lambda,
   keyword_let,

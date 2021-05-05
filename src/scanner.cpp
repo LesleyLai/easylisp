@@ -66,6 +66,8 @@ auto Scanner::check_keyword(unsigned int start_offset, std::string_view rest,
 [[nodiscard]] auto Scanner::identifier_type() -> TokenType
 {
   switch (peek()) {
+  case 'd':
+    return check_keyword(1, "efine", TokenType::keyword_define);
   case 'i':
     return check_keyword(1, "f", TokenType::keyword_if);
   case 'l':
