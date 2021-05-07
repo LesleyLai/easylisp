@@ -80,6 +80,8 @@ auto Scanner::check_keyword(unsigned int start_offset, std::string_view rest,
       break;
     }
     break;
+  case 'r':
+    return check_keyword(1, "equire", TokenType::keyword_require);
   default:
     break;
   }

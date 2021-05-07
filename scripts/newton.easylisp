@@ -1,0 +1,18 @@
+(require number) ;; for abs
+
+;; Newton-Raphson method
+;; x - initial guess
+;; f - function f(x) which we want to find root
+;; fp - derivative of f(x)
+;; epsilon - tolerance of result
+(define newton (lambda (x f fp epsilon)
+  (let ((guess (- x (/ (f x) (fp x)))))
+    (if (> (abs (- x guess)) epsilon)
+      (newton guess f fp epsilon)
+      guess))))
+
+(define sqrt-newton (lambda (a)
+  (newton 1
+          (lambda (x) (- (* x x) a))
+          (lambda (x) (* 2 x))
+          1e-8)))

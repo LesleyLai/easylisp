@@ -1,0 +1,6 @@
+source:
+(require)
+
+===============
+
+Syntax error: ) is not a valid module name

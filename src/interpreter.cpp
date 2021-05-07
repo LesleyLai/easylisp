@@ -1,8 +1,13 @@
 #include "interpreter.hpp"
 #include "environment.hpp"
+#include "file_util.hpp"
+#include "parser.hpp"
 #include "value.hpp"
 
+#include <fstream>
 #include <stdexcept>
+
+namespace {
 
 auto eval_args(const std::vector<ExprPtr>& arg_exprs, const EnvPtr& env)
     -> std::vector<Value>
@@ -17,6 +22,8 @@ auto eval_args(const std::vector<ExprPtr>& arg_exprs, const EnvPtr& env)
 {
   return ::apply(eval(*expr.func, env), eval_args(expr.arguments, env));
 }
+
+} // anonymous namespace
 
 struct ObjectApplier : ObjectVisitor {
   Value result;
@@ -65,7 +72,7 @@ struct ObjectApplier : ObjectVisitor {
           return visitor.result;
         } else {
           throw std::runtime_error{
-              fmt::format("Type error: cannot apply to {}!", to_string(func))};
+              fmt::format("Type error: Cannot apply to {}!", to_string(func))};
         }
       },
       func);
@@ -139,4 +146,35 @@ void add_definition(const Definition& definition)
 {
   Environment::global()->add(definition.var,
                              eval(*definition.expr, Environment::global()));
+}
+
+void require_module(const Require& require)
+{
+  std::ifstream file{fmt::format("{}.easylisp", require.module_name)};
+  if (!file.is_open())
+    throw std::runtime_error{fmt::format("Runtime error: Cannot open module {}",
+                                         require.module_name)};
+  interpret(parse(file_to_string(file)));
+}
+
+auto interpret_toplevel(const Toplevel& toplevel) -> std::optional<Value>
+{
+  return std::visit( //
+      overloaded{[](const ExprPtr& expr) {
+                   return std::optional{eval(*expr, Environment::global())};
+                 },
+                 [](const Definition& definition) -> std::optional<Value> {
+                   add_definition(definition);
+                   return std::nullopt;
+                 },
+                 [](const Require& require) -> std::optional<Value> {
+                   require_module(require);
+                   return std::nullopt;
+                 }},
+      toplevel);
+}
+
+void interpret(const Program& program)
+{
+  for (const auto& toplevel : program) { interpret_toplevel(toplevel); }
 }

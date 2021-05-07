@@ -1,0 +1,7 @@
+;; @ninjawedding at #include<C++> discord server mentioned this
+;; fixed-point combinator
+(define fix (lambda (w) ((lambda (f) (f f)) (lambda (f) (w (lambda (x) ((f f) x)))))))
+
+;; Factorial implemented by fix
+(define fac1 (lambda (fac) (lambda (v) (if (eq? v 0) 1 (* v (fac (- v 1)))))))
+(define fac (fix fac1))

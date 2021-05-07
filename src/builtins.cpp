@@ -93,6 +93,8 @@ template <typename BinaryOp> auto builtin_arith_proc(std::string name)
     check_args_count_greater_equal(name, args.size(), 1);
     check_arg_is_number(args.front());
     auto number = std::get<double>(args.front());
+    if (args.size() == 1) { return BinaryOp{}(0, number); }
+
     for (auto i = args.begin() + 1; i != args.end(); ++i) {
       check_arg_is_number(*i);
       number = BinaryOp{}(number, std::get<double>(*i));

@@ -13,15 +13,10 @@ namespace {
 
   std::vector<std::string> results;
   for (const auto& toplevel : program) {
-    std::visit( //
-        overloaded{
-            [&](const ExprPtr& expr) {
-              const auto val = eval(*expr, Environment::global());
-              results.push_back(to_string(val));
-            },
-            [](const Definition& definition) { add_definition(definition); },
-        },
-        toplevel);
+    if (auto value_opt = interpret_toplevel(toplevel);
+        value_opt != std::nullopt) {
+      results.push_back(to_string(*value_opt));
+    }
   }
   return fmt::format("{}", fmt::join(results, "\n"));
 }
@@ -47,6 +42,8 @@ TEST_CASE("Evaluator test")
   SECTION("plus") { verify_interpret("(+ 1 3 4)"); };
 
   SECTION("cannot invoke + without arguments") { verify_interpret("(+)"); };
+
+  SECTION("negation") { verify_interpret("(- 1)"); };
 
   SECTION("minus") { verify_interpret("(- 1 3 4)"); };
 

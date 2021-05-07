@@ -1,0 +1,23 @@
+(require list)
+
+(define adjacent-map
+  (lambda (f lst)
+    (if (or (null? lst) (null? (cdr lst)))
+        null
+        (let ((tail (cdr lst)))
+          (cons (f (car lst) (car tail)) (adjacent-map f tail))))))
+
+(define pascal-next-row (lambda (row)
+                          (append (cons 1 (adjacent-map + row)) (list 1))))
+
+(define pascal-triangle-iter
+  (lambda (n row acc)
+    (if (eq? n 0) acc
+        (let ((next-row (pascal-next-row row)))
+          (pascal-triangle-iter (- n 1) next-row (cons row acc))))))
+
+(define pascal-triangle
+  (lambda (n)
+    (reverse (pascal-triangle-iter n (list 1) (list)))))
+
+(map print (pascal-triangle 10))

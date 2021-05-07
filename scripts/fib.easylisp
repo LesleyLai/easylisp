@@ -1,0 +1,22 @@
+;; Very slow recursive implementation of fibonacci
+(define fib-rec (lambda (x)
+  (if (< x 2)
+      x
+      (+ (fib-rec (- x 1)) (fib-rec (- x 2))))))
+
+;; fibonacci implemented with foldl
+(define fib-fold (lambda (x)
+  (car
+    (foldl
+      (lambda (_ acc)
+        (let ((a (car acc))
+              (b (cdr acc)))
+              (cons b (+ a b))))
+      (cons 0 1)
+      (range 0 x)))))
+
+;; Iterative implemented of fibonacci
+(define fib-helper
+  (lambda (n a b)
+    (if (eq? n 0) a (fib-helper (- n 1) b (+ a b)))))
+(define fib (lambda (n) (fib-helper n 0 1)))

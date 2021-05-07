@@ -89,3 +89,20 @@ TEST_CASE("Parse definition")
     verify_parse_program("(define x 2 2)");
   }
 }
+
+TEST_CASE("Parse require")
+{
+  SECTION("Valid require") { verify_parse_program("(require list)"); }
+
+  SECTION("Require without module name") { verify_parse_program("(require)"); }
+
+  SECTION("Require with invalid module name")
+  {
+    verify_parse_program("(require 1)");
+  }
+
+  SECTION("Require with multiple arguments")
+  {
+    verify_parse_program("(require x y)");
+  }
+}

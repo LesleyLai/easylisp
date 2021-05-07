@@ -1,0 +1,5 @@
+(define abs (lambda (x) (if (< x 0) (- x) x)))
+
+(define min (lambda (x y) (if (< x y) x y)))
+(define max (lambda (x y) (if (< x y) y x)))
+(define minmax (lambda (x y) (if (< x y) (cons x y) (cons y x))))

@@ -68,9 +68,16 @@ struct Definition {
 };
 
 /**
+ * @brief A require clause imports a module
+ */
+struct Require {
+  std::string module_name;
+};
+
+/**
  * @brief A Toplevel is either an expression or a definition
  */
-using Toplevel = std::variant<ExprPtr, Definition>;
+using Toplevel = std::variant<ExprPtr, Definition, Require>;
 using Program = std::vector<Toplevel>;
 
 #define EXPR_ACCEPT                                                            \

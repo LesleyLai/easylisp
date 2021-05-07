@@ -41,6 +41,9 @@ $ easylisp
 (1 4 9 16 25)
 >> (cons 1 (list 2 3 4))
 (1 2 3 4)
+>> (require list) ;; load list.easylisp
+>> (cartesian-product (list 1 2 3) (list 4 5))
+((1 . 4) (1 . 5) (2 . 4) (2 . 5) (3 . 4) (3 . 5))
 ```
 
 Or you can use it to interpret a file:
@@ -48,6 +51,8 @@ Or you can use it to interpret a file:
 ```sh
 $ easylisp file.easylisp
 ```
+
+## Examples
 
 You can find some examples in the `scripts` folder. Those scripts will be automatically copied into the same folder of
 executable after build.
@@ -138,6 +143,11 @@ We can achieve recursion by using definition. For example:
 (cons 1 (list 2 3)) ;; (1 2 3)
 (cons 1 2) ;; (1 . 2) - This is a pair instead of a list
 ```
+
+### Require
+
+`require` loads a module in the working directory. For example, `(require list)` interpret `list.easylisp` and adds the
+results into the global environment.
 
 ### builtin constants and procedural
 

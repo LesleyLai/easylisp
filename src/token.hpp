@@ -15,6 +15,7 @@ enum class TokenType {
   keyword_if,
   keyword_lambda,
   keyword_let,
+  keyword_require,
 };
 
 /// @brief A type alias that defines the number type for our language

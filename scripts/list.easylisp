@@ -24,8 +24,7 @@
 ;; (member 5 (range 0 4)) ; ()
 ;; (member 1 (range 0 4)) ; (1 2 3)
 (define member (lambda (v lst)
-  (if (null? lst) null (if (equal? v (car lst)) lst (member v (cdr lst))))
-  ))
+  (if (null? lst) null (if (equal? v (car lst)) lst (member v (cdr lst))))))
 
 ;; Same as member, but use eq?
 (define memq (lambda (v lst)
@@ -43,8 +42,7 @@
 
 ;; Drops first n elements of lst
 (define drop (lambda (lst n)
-  (if (eq? n 0) lst (drop (cdr lst) (- n 1)))
-))
+  (if (eq? n 0) lst (drop (cdr lst) (- n 1)))))
 
 ;; Same as (cons (take lst n) (drop lst n))
 (define split-at (lambda (lst n)
@@ -52,8 +50,7 @@
     (eq? n 0) 
     (cons null lst)
     (let ((res (split-at (cdr lst) (- n 1))))
-      (cons (cons (car lst) (car res)) (cdr res))
-    ))))
+      (cons (cons (car lst) (car res)) (cdr res))))))
 
 ;; Flattens an arbituary S-expression into a list
 ;; example:
@@ -75,9 +72,3 @@
 ;; Counts the number of elements of lst that satisfy pred
 (define count (lambda (pred lst)
   (foldl (lambda (v acc) (if (pred v) (+ 1 acc) acc)) 0 lst)))
-
-
-
-
-
-

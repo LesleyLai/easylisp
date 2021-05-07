@@ -86,15 +86,17 @@ template <> struct fmt::formatter<Toplevel> {
   auto format(const Toplevel& toplevel, FormatContext& ctx)
   {
     return std::visit( //
-        overloaded{
-            [&](const ExprPtr& expr) {
-              return fmt::format_to(ctx.out(), "{}", expr);
-            },
-            [&](const Definition& definition) {
-              return fmt::format_to(ctx.out(), "(define {} {})", definition.var,
-                                    definition.expr);
-            },
-        },
+        overloaded{[&](const ExprPtr& expr) {
+                     return fmt::format_to(ctx.out(), "{}", expr);
+                   },
+                   [&](const Definition& definition) {
+                     return fmt::format_to(ctx.out(), "(define {} {})",
+                                           definition.var, definition.expr);
+                   },
+                   [&](const Require& require_clause) {
+                     return fmt::format_to(ctx.out(), "(require {})",
+                                           require_clause.module_name);
+                   }},
         toplevel);
   }
 };

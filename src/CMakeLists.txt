@@ -12,7 +12,7 @@ add_library(common
         interpreter.hpp
         environment.cpp
         environment.hpp
-        config.hpp builtins.cpp)
+        config.hpp builtins.cpp file_util.cpp file_util.hpp)
 target_link_libraries(common PRIVATE compiler_options CONAN_PKG::fast_float PUBLIC CONAN_PKG::fmt)
 target_include_directories(common PUBLIC "${PROJECT_SOURCE_DIR}/src")
 

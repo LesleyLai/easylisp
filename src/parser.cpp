@@ -22,10 +22,17 @@ public:
       auto look_ahead_itr = itr_;
       ++look_ahead_itr;
 
-      if (match_itr(TokenType::keyword_define, look_ahead_itr)) {
+      switch (look_ahead_itr->type) {
+      case TokenType::keyword_define:
         itr_ = look_ahead_itr;
         ++itr_;
         return parse_definition();
+      case TokenType::keyword_require:
+        itr_ = look_ahead_itr;
+        ++itr_;
+        return parse_require();
+      default:
+        break;
       }
     }
 
@@ -33,17 +40,19 @@ public:
   }
 
 private:
-  auto match(TokenType type) -> bool
-  {
-    if (is_at_end()) { return false; }
+  auto match(TokenType type) -> bool { return itr_->type == type; }
 
-    return itr_->type == type;
-  }
-
-  auto match_itr(TokenType type, Scanner itr) -> bool
+  auto parse_require() -> Require
   {
-    if (is_at_end()) { return false; }
-    return itr->type == type;
+    if (!match(TokenType::identifier)) {
+      throw std::runtime_error(fmt::format(
+          "Syntax error: {} is not a valid module name", itr_->lexeme));
+    }
+    std::string module_name{itr_->lexeme};
+    ++itr_;
+
+    consume_right_param();
+    return Require{module_name};
   }
 
   auto parse_definition() -> Definition

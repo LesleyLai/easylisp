@@ -2,5 +2,5 @@ source:
 (12)
 
 error:
-Type error: cannot apply to 12!
+Type error: Cannot apply to 12!
 
