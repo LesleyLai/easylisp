@@ -73,4 +73,4 @@ jobs:
 
     - name: Test
       working-directory: ${{ env.build_dir }}
-      run: ctest -C $BUILD_TYPE
+      run: ctest -C ${{ env.config }}

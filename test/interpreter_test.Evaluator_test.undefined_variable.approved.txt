@@ -1,6 +1,6 @@
 source:
 x
 
-output:
-42
+error:
+ReferenceError: x is not defined
 
