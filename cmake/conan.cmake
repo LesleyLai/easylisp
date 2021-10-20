@@ -7,9 +7,6 @@ macro(run_conan)
 
     include(${CMAKE_BINARY_DIR}/conan.cmake)
 
-    conan_add_remote(NAME bincrafters URL
-            https://api.bintray.com/conan/bincrafters/public-conan)
-
     conan_cmake_run(REQUIRES
             fmt/7.1.3
             fast_float/1.0.0

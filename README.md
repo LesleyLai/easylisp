@@ -1,5 +1,8 @@
 # Easylisp
 
+[![Ubuntu](https://github.com/LesleyLai/easylisp/actions/workflows/Ubuntu.yml/badge.svg)](https://github.com/LesleyLai/easylisp/actions/workflows/Ubuntu.yml)
+[![Windows](https://github.com/LesleyLai/easylisp/actions/workflows/Windows.yml/badge.svg)](https://github.com/LesleyLai/easylisp/actions/workflows/Windows.yml)
+
 This is a lisp interpreter written for a course project. It does not intend to be fast or feature rich, and the C++ code
 is pretty hacky, but it can probably provide some educational value.
 
