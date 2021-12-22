@@ -2,7 +2,6 @@ add_library(common
         token.hpp
         scanner.hpp
         scanner.cpp
-        ast.cpp
         ast.hpp
         parser.cpp
         parser.hpp

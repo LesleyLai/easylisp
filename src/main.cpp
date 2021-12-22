@@ -10,6 +10,8 @@ namespace {
 void repl()
 {
   std::string line;
+  Interpreter interpreter;
+
   while (true) {
     fmt::print(">> ");
     std::getline(std::cin, line);
@@ -21,7 +23,7 @@ void repl()
     if (line == "(exit)") { std::exit(0); }
     try {
       for (const auto& toplevel : parse(line)) {
-        if (const auto value_opt = interpret_toplevel(toplevel);
+        if (const auto value_opt = interpreter.interpret_toplevel(toplevel);
             value_opt != std::nullopt) {
           fmt::print("{}\n", to_string(*value_opt));
         }
@@ -42,8 +44,9 @@ void run_file(const char* filename)
   }
 
   const auto source = file_to_string(file);
+  Interpreter interpreter;
   try {
-    interpret(parse(source));
+    interpreter.interpret(parse(source));
   } catch (const std::exception& e) {
     fmt::print("{}\n", e.what());
   }

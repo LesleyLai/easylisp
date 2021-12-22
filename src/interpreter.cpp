@@ -142,13 +142,12 @@ auto eval(const Expr& expr, const EnvPtr& env) -> Value
   return evaluator.result;
 }
 
-void add_definition(const Definition& definition)
+void Interpreter::add_definition(const Definition& definition)
 {
-  Environment::global()->add(definition.var,
-                             eval(*definition.expr, Environment::global()));
+  global_env_->add(definition.var, eval(*definition.expr, global_env_));
 }
 
-void require_module(const Require& require)
+void Interpreter::require_module(const Require& require)
 {
   std::ifstream file{fmt::format("{}.easylisp", require.module_name)};
   if (!file.is_open())
@@ -157,24 +156,25 @@ void require_module(const Require& require)
   interpret(parse(file_to_string(file)));
 }
 
-auto interpret_toplevel(const Toplevel& toplevel) -> std::optional<Value>
+auto Interpreter::interpret_toplevel(const Toplevel& toplevel)
+    -> std::optional<Value>
 {
   return std::visit( //
-      overloaded{[](const ExprPtr& expr) {
-                   return std::optional{eval(*expr, Environment::global())};
+      overloaded{[this](const ExprPtr& expr) {
+                   return std::optional{eval(*expr, global_env_)};
                  },
-                 [](const Definition& definition) -> std::optional<Value> {
+                 [this](const Definition& definition) -> std::optional<Value> {
                    add_definition(definition);
                    return std::nullopt;
                  },
-                 [](const Require& require) -> std::optional<Value> {
+                 [this](const Require& require) -> std::optional<Value> {
                    require_module(require);
                    return std::nullopt;
                  }},
       toplevel);
 }
 
-void interpret(const Program& program)
+void Interpreter::interpret(const Program& program)
 {
   for (const auto& toplevel : program) { interpret_toplevel(toplevel); }
 }

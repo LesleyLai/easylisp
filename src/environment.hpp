@@ -11,11 +11,11 @@ class Environment {
   EnvPtr parent_ = nullptr;
 
 public:
-  struct create_global_t {};
+  static constexpr struct create_global_t {
+  } create_global{};
   explicit Environment(create_global_t);
   explicit Environment(EnvPtr parent) : parent_(MOV(parent)) {}
 
-  [[nodiscard]] static auto global() -> std::shared_ptr<Environment>&;
   [[nodiscard]] auto find(const std::string& var) const -> const Value*;
   void add(std::string variable, Value value);
 };

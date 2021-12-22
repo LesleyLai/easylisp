@@ -23,19 +23,19 @@ TEST_CASE("Global Environment")
 
 TEST_CASE("Local Environment")
 {
-  Environment env{Environment::global()};
+  Environment env{std::make_shared<Environment>(Environment::create_global)};
   env.add("x", Value{42.0});
 
   SECTION("Get local variable")
   {
-    auto* x = env.find("x");
+    const auto* x = env.find("x");
     REQUIRE(x != nullptr);
     REQUIRE(std::get<double>(*x) == 42.0);
   }
 
   SECTION("Get variable from parent scope")
   {
-    auto* plus = env.find("+");
+    const auto* plus = env.find("+");
     REQUIRE(plus != nullptr);
     REQUIRE(
         dynamic_cast<const BuiltinProc&>(*std::get<ObjectPtr>(*plus)).name ==

@@ -9,11 +9,12 @@ namespace {
 
 [[nodiscard]] auto interpret_and_print(std::string_view source) -> std::string
 {
+  Interpreter interpreter;
   Program program = parse(source);
 
   std::vector<std::string> results;
   for (const auto& toplevel : program) {
-    if (auto value_opt = interpret_toplevel(toplevel);
+    if (auto value_opt = interpreter.interpret_toplevel(toplevel);
         value_opt != std::nullopt) {
       results.push_back(to_string(*value_opt));
     }
