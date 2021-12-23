@@ -72,7 +72,7 @@ struct ExprPrinter : ExprVisitor {
   }
 };
 
-[[nodiscard]] auto to_string(const Expr& expr) -> std::string
+[[nodiscard]] inline auto to_string(const Expr& expr) -> std::string
 {
   ExprPrinter printer;
   expr.accept(printer);
