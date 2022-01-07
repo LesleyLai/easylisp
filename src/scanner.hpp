@@ -19,15 +19,15 @@ public:
     advance();
   }
 
-  [[nodiscard]] auto operator->() -> Token*
+  [[nodiscard]] auto operator->() -> Token* { return &current_token_; }
+
+  [[nodiscard]] auto operator->() const -> const Token*
   {
     return &current_token_;
   }
 
-  [[nodiscard]] auto operator*() -> Token
-  {
-    return current_token_;
-  }
+  [[nodiscard]] auto operator*() -> Token { return current_token_; }
+  [[nodiscard]] auto operator*() const -> Token { return current_token_; }
 
   auto operator++() -> Scanner&
   {

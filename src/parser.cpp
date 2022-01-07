@@ -14,7 +14,7 @@ class Parser {
 public:
   explicit Parser(std::string_view source) : itr_{source} {}
 
-  auto is_at_end() -> bool { return itr_->type == TokenType::eof; }
+  auto is_at_end() const -> bool { return itr_->type == TokenType::eof; }
 
   [[nodiscard]] auto parse_toplevel() -> Toplevel
   {
