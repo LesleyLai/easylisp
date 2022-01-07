@@ -107,9 +107,10 @@ struct Evaluator : ExprVisitor {
   void visit(const LetExpr& expr) override
   {
     std::vector<Value> binding_vals;
-    for (const Binding& binding : expr.bindings) {
-      binding_vals.push_back(eval(*binding.expr, env));
-    }
+    binding_vals.reserve(expr.bindings.size());
+    std::ranges::transform(
+        expr.bindings, std::back_inserter(binding_vals),
+        [&](const Binding& binding) { return eval(*binding.expr, env); });
     auto body_env = std::make_shared<Environment>(env);
     for (std::size_t i = 0; i < binding_vals.size(); ++i) {
       body_env->add(expr.bindings[i].variable, binding_vals[i]);

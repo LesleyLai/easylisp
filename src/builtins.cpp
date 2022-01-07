@@ -2,6 +2,7 @@
 #include "interpreter.hpp"
 #include <cassert>
 #include <numeric>
+#include <ranges>
 
 namespace {
 
@@ -80,8 +81,8 @@ auto to_vector(const Value& list) -> std::vector<Value>
 auto to_lisp_list(const Values& args) -> Value
 {
   Value list = nullptr;
-  for (auto begin = args.rbegin(), end = args.rend(); begin != end; ++begin) {
-    list = std::make_shared<Cons>(*begin, list, true);
+  for (const auto& arg : std::ranges::reverse_view(args)) {
+    list = std::make_shared<Cons>(arg, list, true);
   }
 
   return list;
@@ -95,11 +96,11 @@ template <typename BinaryOp> auto builtin_arith_proc(std::string name)
     auto number = std::get<double>(args.front());
     if (args.size() == 1) { return BinaryOp{}(0, number); }
 
-    for (auto i = args.begin() + 1; i != args.end(); ++i) {
-      check_arg_is_number(*i);
-      number = BinaryOp{}(number, std::get<double>(*i));
-    }
-    return number;
+    return std::accumulate(args.begin() + 1, args.end(), number,
+                           [&](double acc, const Value& arg) {
+                             check_arg_is_number(arg);
+                             return BinaryOp{}(acc, std::get<double>(arg));
+                           });
   });
 }
 
@@ -265,12 +266,13 @@ auto builtin_filter() -> Value
     std::vector<Value> values = to_vector(args[1]);
     std::vector<Value> results;
     results.reserve(values.size());
-    std::ranges::copy_if(
-        values, std::back_inserter(results), [&](const Value& value) {
-          const auto result = ::apply(args[0], std::vector{value});
-          const bool* satisfied = std::get_if<bool>(&result);
-          return !(satisfied != nullptr && !*satisfied);
-        });
+    std::ranges::copy_if(values, std::back_inserter(results),
+                         [&](const Value& value) {
+                           const Value value_arr[] = {value};
+                           const auto result = ::apply(args[0], value_arr);
+                           const bool* satisfied = std::get_if<bool>(&result);
+                           return !(satisfied != nullptr && !*satisfied);
+                         });
     return to_lisp_list(results);
   });
 }
